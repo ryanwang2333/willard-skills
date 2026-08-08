@@ -1,6 +1,6 @@
 ---
 name: find-skills
-description: Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.
+description: Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill. Also trigger on Chinese: 找 skill / 有没有 skill 可以做 X / 帮我找个工具或技能 / 扩展能力。
 ---
 
 # Find Skills
@@ -109,16 +109,17 @@ The `-g` flag installs globally (user-level) and `-y` skips confirmation prompts
 > 正确流程如下，与用户确认后再执行：
 
 1. **发现 skill 后先验证**：确认来源可信、有维护、确实满足需求（见上方 Step 4）。
-2. **落到中央仓库**：把 skill 内容放进
-   `~/.claude/skills-repo/plugins/environment-skills/skills/<skill-name>/`
-   （若是从生态仓库拿的，先 clone / 下载到临时目录，再拷入；保留其 LICENSE）。
+2. **落到中央仓库**：按 skill 类型选插件目录——
+   - 环境绑定（识图/抓取/本机工具）→ `~/.claude/skills-repo/plugins/environment-skills/skills/<skill-name>/`
+   - 通用（工作流/文档/通用方法）→ `~/.claude/skills-repo/plugins/general-skills/skills/<skill-name>/`
+   （若是从生态仓库拿的，先 clone / 下载到临时目录，再拷入；保留其 LICENSE。）
 3. **提交并推送**：`git -C ~/.claude/skills-repo add .` → commit → `git push`
    （GitHub 仓库 `ryanwang2333/willard-skills`，Cowork 侧经插件市场自动同源）。
-4. **建 junction 分发到 Claude Code**：
+4. **建 junction 分发到 Claude Code**（先删已存在的旧链接，再 mklink）：
    ```bash
-   python3 -c "import os,subprocess;link=r'C:\Users\Willard\.claude\skills\<skill-name>';target=r'C:\Users\Willard\.claude\skills-repo\plugins\environment-skills\skills\<skill-name>';os.makedirs(r'C:\Users\Willard\.claude\skills',exist_ok=True);subprocess.run(['cmd','/c','mklink','/J',link,target],check=True)"
+   python3 -c "import subprocess;link=r'C:\Users\Willard\.claude\skills\<skill-name>';target=r'C:\Users\Willard\.claude\skills-repo\plugins\<environment-skills|general-skills>\skills\<skill-name>';subprocess.run(['cmd','/c','rmdir',link],capture_output=True);import os;os.makedirs(r'C:\Users\Willard\.claude\skills',exist_ok=True);subprocess.run(['cmd','/c','mklink','/J',link,target],check=True)"
    ```
-   （junction 无需管理员权限；symlink 需要管理员，本机不可用。）
+   （junction 无需管理员权限；symlink 需要管理员，本机不可用。`<...>` 是占位符，按第 2 步选定的插件替换。）
 5. **验证**：重启 Claude Code 后确认该 skill 正常加载。
 
 **不要把 `npx skills add -g` 作为本机默认安装路径。** 仅当用户明确要求试验性安装、且接受其脱离仓库管理时，才可绕过上述流程。

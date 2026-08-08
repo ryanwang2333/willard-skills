@@ -8,6 +8,10 @@
     {
       "name": "environment-skills",
       "source": "./plugins/environment-skills"
+    },
+    {
+      "name": "general-skills",
+      "source": "./plugins/general-skills"
     }
   ]
 }
