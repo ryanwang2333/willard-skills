@@ -1,0 +1,13 @@
+{
+  "name": "willard-skills",
+  "owner": {
+    "name": "Willard",
+    "github_handle": "ryanwang2333"
+  },
+  "plugins": [
+    {
+      "name": "environment-skills",
+      "source": "./plugins/environment-skills"
+    }
+  ]
+}

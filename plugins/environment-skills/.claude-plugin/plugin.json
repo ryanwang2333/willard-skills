@@ -1,0 +1,8 @@
+{
+  "name": "environment-skills",
+  "description": "本机环境绑定 skills: image-vision(MCP 识图)、web-content-fetcher(Edge/代理网页抓取)、find-skills(skill 发现)、frontend-design(前端视觉设计)",
+  "version": "1.0.0",
+  "author": {
+    "name": "Willard"
+  }
+}
