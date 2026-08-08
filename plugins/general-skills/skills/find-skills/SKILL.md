@@ -104,9 +104,9 @@ The `-g` flag installs globally (user-level) and `-y` skips confirmation prompts
 
 ## 本机安装方式（willard-skills 仓库）
 
-> 本机（Windows）的 skill 一律由**中央 git 仓库**管理，**不要**用 `npx skills add -g`
-> 直接写进 `~/.claude/skills/`——那会绕过单一事实源，与后续分发脱节。
-> 正确流程如下，与用户确认后再执行：
+> 本机（Windows）的 skill 一律由**中央 git 仓库** `~/.claude/skills-repo` 管理，
+> **不要**用 `npx skills add -g` 直接写进 `~/.claude/skills/`——那会绕过单一事实源，
+> 且本机已废弃 junction/手动拷贝分发。正确流程如下，与用户确认后再执行：
 
 1. **发现 skill 后先验证**：确认来源可信、有维护、确实满足需求（见上方 Step 4）。
 2. **落到中央仓库**：按 skill 类型选插件目录——
@@ -114,13 +114,12 @@ The `-g` flag installs globally (user-level) and `-y` skips confirmation prompts
    - 通用（工作流/文档/通用方法）→ `~/.claude/skills-repo/plugins/general-skills/skills/<skill-name>/`
    （若是从生态仓库拿的，先 clone / 下载到临时目录，再拷入；保留其 LICENSE。）
 3. **提交并推送**：`git -C ~/.claude/skills-repo add .` → commit → `git push`
-   （GitHub 仓库 `ryanwang2333/willard-skills`，Cowork 侧经插件市场自动同源）。
-4. **建 junction 分发到 Claude Code**（先删已存在的旧链接，再 mklink）：
-   ```bash
-   python3 -c "import subprocess;link=r'C:\Users\Willard\.claude\skills\<skill-name>';target=r'C:\Users\Willard\.claude\skills-repo\plugins\<environment-skills|general-skills>\skills\<skill-name>';subprocess.run(['cmd','/c','rmdir',link],capture_output=True);import os;os.makedirs(r'C:\Users\Willard\.claude\skills',exist_ok=True);subprocess.run(['cmd','/c','mklink','/J',link,target],check=True)"
-   ```
-   （junction 无需管理员权限；symlink 需要管理员，本机不可用。`<...>` 是占位符，按第 2 步选定的插件替换。）
-5. **验证**：重启 Claude Code 后确认该 skill 正常加载。
+   （GitHub 仓库 `ryanwang2333/willard-skills`，cowork 侧与 code 侧各自从该 marketplace 安装插件）。
+4. **两侧更新**：
+   - **cowork 侧**：Claude Desktop Customize → Plugins 里点「更新」拉最新插件。
+   - **code 侧**：跑 `claude plugin marketplace update`（或会话内 `/plugin marketplace update`）拉最新。
+   （skill 以带插件前缀加载：`environment-skills:<name>` / `general-skills:<name>`，无裸名版。）
+5. **验证**：重启后确认该 skill 正常加载。
 
 **不要把 `npx skills add -g` 作为本机默认安装路径。** 仅当用户明确要求试验性安装、且接受其脱离仓库管理时，才可绕过上述流程。
 
