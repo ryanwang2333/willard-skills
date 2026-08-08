@@ -2,10 +2,7 @@
 
 # Web Content Fetcher
 
-**网页正文提取 · 永久免费 · 支持微信公众号**
-
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+**网页正文提取 · 返回干净 Markdown · 支持微信公众号**
 
 </div>
 
@@ -13,53 +10,28 @@
 
 ## 简介
 
-Web Content Fetcher 是一个轻量级的网页正文提取工具，能够自动将任意网页转换为干净的 Markdown 格式，保留标题、链接、图片和列表结构。
+Web Content Fetcher 把任意网页 URL 转成干净的 Markdown（保留标题、链接、图片、列表、代码块），
+基于 Scrapling 实现，内置 fast / stealth 双模式自动降级。
 
 **核心优势：**
-- Scrapling 优先提取，内置 fast / stealth 双模式，自动降级
-- 完美支持微信公众号、掘金、CSDN 等国内平台
-- 返回标准 Markdown 格式，便于后续处理
-- 零配置，开箱即用
-
----
+- Scrapling fast（HTTP，~1-3s）优先，内容过少时自动降级 stealth（无头浏览器，~5-15s）
+- 支持微信公众号、掘金、CSDN 等国内平台
+- 返回标准 Markdown，便于后续处理
+- 本仓库版本已做 Windows 本机适配（见下文"本机适配"）
 
 ## 安装
-
-### 方式一：一键安装（推荐）
-
-访问 [skills.sh](https://skills.sh/shirenchuang/web-content-fetcher/web-content-fetcher) 页面，按提示一键安装。
-
-### 方式二：命令行安装
-
-```bash
-npx skills add https://github.com/shirenchuang/web-content-fetcher --skill web-content-fetcher
-```
-
-### 方式三：手动安装
-
-```bash
-# Clone
-git clone https://github.com/shirenchuang/web-content-fetcher.git
-
-# Copy to Claude Code skills directory
-cp -r web-content-fetcher ~/.claude/skills/
-```
-
-### 安装 Python 依赖
 
 ```bash
 pip install scrapling html2text
 ```
 
-> **注意**：在系统管理的 Python (macOS/Linux) 上，加 `--break-system-packages` 或使用 venv。
-
----
+> 在系统管理的 Python (macOS/Linux) 上，加 `--break-system-packages` 或使用 venv。
 
 ## 使用方式
 
-### 在 Claude Code 中使用
+### 在 Claude Code 中
 
-直接告诉 AI 你要读取的 URL，会自动选择最佳方案：
+直接告诉 AI 要读取的 URL，会自动选择最佳方案：
 
 ```
 帮我读取这篇文章：https://mp.weixin.qq.com/s/EwVItQH4JUsONqv_Fmi4wQ
@@ -75,17 +47,15 @@ python3 scripts/fetch.py https://sspai.com/post/73145
 # 强制 stealth 模式（用于 JS 渲染页面）
 python3 scripts/fetch.py https://mp.weixin.qq.com/s/xxx --stealth
 
+# 强制直连，不走本机系统代理
+python3 scripts/fetch.py https://sspai.com/post/73145 --no-proxy
+
 # 限制输出字符数（默认 30000）
 python3 scripts/fetch.py https://example.com/article 15000
 
 # JSON 输出（含 url, mode, selector, content_length）
 python3 scripts/fetch.py https://example.com --json
-
-# 输出到文件
-python3 scripts/fetch.py https://example.com/article > output.md
 ```
-
----
 
 ## 提取策略
 
@@ -98,7 +68,6 @@ URL 输入
 │     · fast 模式：~1-3s，大部分网站   │
 │     · stealth 模式：~5-15s，JS 渲染  │
 │     · 内容太少时自动 fast → stealth   │
-│     · 本机已内置系统代理 + Edge       │
 └─────────────────────────────────────┘
 ```
 
@@ -111,48 +80,25 @@ URL 输入
 | `juejin.cn` | `--stealth` | JS 渲染 SPA |
 | `sspai.com` | fast | 静态 HTML |
 | `blog.csdn.net` | fast | 静态 HTML |
+| `ruanyifeng.com` | fast | 静态博客 |
+| `openai.com` | fast | 静态 HTML |
+| `blog.google` | fast | 静态 HTML |
 | 其他 | fast | 自动降级 |
 
----
+### 支持平台
 
-## 支持平台
-
-### 国内平台
-
-| 平台 | 模式 | 状态 | 说明 |
-|------|------|:----:|------|
-| 微信公众号 (mp.weixin.qq.com) | fast | ✅ | 正文完整提取 |
-| 掘金 (juejin.cn) | stealth (auto) | ✅ | 自动降级到 stealth |
-| CSDN (blog.csdn.net) | fast | ✅ | 正文精准提取 |
-| 少数派 (sspai.com) | fast | ✅ | article 选择器命中 |
-| 博客园 (cnblogs.com) | fast | ✅ | 文章列表和正文 |
-| 知乎 (zhihu.com) | stealth | ✅ | 需有效 URL |
-| 36氪 (36kr.com) | fast | ✅ | 需有效文章 URL |
-| 今日头条 (toutiao.com) | stealth | ✅ | JS 渲染，需有效文章 URL |
-| InfoQ 中文 (infoq.cn) | stealth (auto) | ✅ | 需有效文章 URL |
-| 网易 (163.com) | fast | ✅ | 需有效文章 URL |
-| 小红书 | - | ❌ | 需登录态 |
-
-### 海外平台
-
-| 平台 | 模式 | 状态 | 说明 |
-|------|------|:----:|------|
-| OpenAI Blog | fast | ✅ | article 选择器命中 |
-| Google Blog | fast | ✅ | article 选择器命中 |
-| Nature | fast | ✅ | 论文摘要完整 |
-| arXiv | fast | ✅ | 标题/作者/摘要 |
-| GitHub | fast | ✅ | README 完整提取 |
-| Next.js Blog | fast | ✅ | article 选择器命中 |
-| React Docs (react.dev) | fast | ✅ | 文档正文清晰 |
-| MDN Web Docs | fast | ✅ | main 选择器命中 |
-| Python Docs | fast | ✅ | 目录和正文 |
-| Paul Graham Essays | fast | ✅ | 经典静态页 |
-| 阮一峰博客 | fast | ✅ | 周刊完整提取 |
-| Claude Code Docs | fast | ✅ | 文档正文 |
-| Product Hunt | stealth | ⚠️ | Cloudflare 验证拦截 |
-| more... | | | |
-
----
+| 平台 | 模式 | 说明 |
+|------|------|------|
+| 微信公众号 (mp.weixin.qq.com) | stealth | JS 渲染 |
+| 掘金 (juejin.cn) | stealth (auto) | 自动降级 |
+| CSDN (blog.csdn.net) | fast | 正文提取 |
+| 少数派 (sspai.com) | fast | article 选择器 |
+| 知乎 (zhihu.com) | stealth | 需有效 URL |
+| OpenAI Blog | fast | article 选择器 |
+| Google Blog | fast | article 选择器 |
+| arXiv | fast | 标题/作者/摘要 |
+| MDN Web Docs | fast | main 选择器 |
+| 阮一峰博客 | fast | 静态页 |
 
 ## 输出格式
 
@@ -163,44 +109,14 @@ URL 输入
 - **图片**：`![alt](url)`（data-src 懒加载自动处理）
 - **列表、代码块、引用块**
 
----
+## 本机适配（Windows）
 
-## 相关项目
+本仓库版本针对本机（企业 Windows）做了适配，细节见 `SKILL.md`：
 
-### [Kuaifa（快发）](https://github.com/shirenchuang/kuaifa) — 公众号一键排版发布
-
-如果你需要将 Markdown 文章发布到微信公众号，推荐使用 **Kuaifa**：
-
-- 一键 Markdown 排版，支持多种主题
-- 自动上传图片到 CDN
-- 一键创建公众号草稿
-- 支持预览和发布
-
-```bash
-pip install kuaifa
-kuaifa publish your-article.md
-```
+- 无头浏览器一律用系统 Edge（`executable_path` 指向 msedge.exe），不执行被禁的 playwright chromium
+- fast 模式直连优先、失败自动转系统代理 127.0.0.1:7890；stealth 走 Edge 系统代理
+- 输出固定 UTF-8，中文不乱码
 
 ---
 
-## 作者
-
-<div align="center">
-
-**石臻说AI**
-
-AI科技博主 · 10+年大厂AI提效专家
-
-专注于个人提效、超级个体、AI 资讯
-
-<img src="qrcode_for_shizhen.jpg" width="200" alt="公众号二维码"/>
-
-*扫码关注公众号*
-
-</div>
-
----
-
-## License
-
-MIT
+*改编自 [shirenchuang/web-content-fetcher](https://github.com/shirenchuang/web-content-fetcher)（MIT），做了本机化改造。*
