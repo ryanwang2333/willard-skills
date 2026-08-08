@@ -81,6 +81,8 @@ claude plugin install "general-skills@willard-skills"
 
 ## 维护规范
 
+权威流程以仓库根 **CLAUDE.md** 为准（进入仓库编辑时自动加载）。核心规则：
+
 同一 skill 只维护一份。改 skill = 改本仓库 + commit + push，两侧各自更新：
 
 ```bash
@@ -89,6 +91,7 @@ git -C ~/.claude/skills-repo commit -m "描述改动"
 git -C ~/.claude/skills-repo push
 ```
 
+- 每改一次 skill，`plugins/<插件名>/.claude-plugin/plugin.json` 的 `version` 必须升一位（如 1.0.1 → 1.0.2）。两侧插件市场只以版本号判断是否需要重新拉取，版本不变则视为已最新、不更新。
 - **cowork 侧更新**：Customize → Plugins 点「更新」。
 - **code 侧更新**：`claude plugin marketplace update` 或会话内 `/plugin marketplace update`。
 - **不要**往 `~/.claude/skills/` 拷文件或建 junction——skill 一律从插件市场分发。
