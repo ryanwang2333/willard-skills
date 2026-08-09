@@ -3,7 +3,7 @@
 本仓库是 skills 的唯一事实源。改 skill 只改这里，提交推送后两侧插件市场各自更新。
 
 ## 1. 写 skill
-- 判断归属：环境绑定进 `environment-skills/skills/`，通用进 `general-skills/skills/`。
+- 判断归属：环境绑定进 `environment-skills/skills/`，通用进 `general-skills/skills/`，游戏开发进 `phaser-skills/skills/`（Phaser 4 官方镜像）或 `game-design-skills/skills/`（设计通识/素材）。
 - 一个 skill 一个目录，核心是 `SKILL.md`；frontmatter 的 `description` 写清触发场景与触发词。
 - 加载带插件前缀：`<插件名>:<skill名>`，如 `general-skills:research`。
 

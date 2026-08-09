@@ -12,6 +12,14 @@
     {
       "name": "general-skills",
       "source": "./plugins/general-skills"
+    },
+    {
+      "name": "phaser-skills",
+      "source": "./plugins/phaser-skills"
+    },
+    {
+      "name": "game-design-skills",
+      "source": "./plugins/game-design-skills"
     }
   ]
 }

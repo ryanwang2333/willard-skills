@@ -1,0 +1,8 @@
+{
+  "name": "phaser-skills",
+  "description": "Phaser 4 官方技能（来源 phaserjs/phaser）：audio-and-sound / tweens / scenes / input-keyboard-mouse-touch / loading-assets / v4-new-features / cameras / render-textures / particles",
+  "version": "1.0.0",
+  "author": {
+    "name": "Willard"
+  }
+}
