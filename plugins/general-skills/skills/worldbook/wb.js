@@ -84,8 +84,8 @@ else if (cmd === 'stats') {
   console.log('条目数:', entries.length);
   console.log('蓝灯常驻:', consts.length, '条 →', consts.map(e => e.uid).join(',') || '无');
   console.log('绿灯触发:', entries.length - consts.length, '条');
-  console.log('总内容:', totalChars, '字符 ≈', estTokens(totalChars), 'token (预算 ' + (wb.token_budget || '?') + ')');
-  console.log('scan_depth:', wb.scan_depth, '| recursive:', wb.recursive_scanning);
+  console.log('总内容:', totalChars, '字符 ≈', estTokens(totalChars), 'token（ST 预算走全局设置，文件内 token_budget 字段 ST 不读' + (wb.token_budget ? `，本文件设 ${wb.token_budget}` : '') + '）');
+  console.log('recursive:', wb.recursive_scanning, '| 扫描深度走全局 world_info_depth' + (wb.scan_depth !== undefined ? `（文件内 scan_depth=${wb.scan_depth}，ST 不读）` : ''));
   console.log('重复关键词:', dup.length ? dup.join(', ') : '无');
   console.log('空 keys 条目:', entries.filter(e => !normKeys(e.keys).length).map(e => e.uid).join(',') || '无');
   console.log('空 content 条目:', entries.filter(e => !(e.content || '').trim()).map(e => e.uid).join(',') || '无');
@@ -108,9 +108,8 @@ else if (cmd === 'audit') {
   if (dup.length) problems.push(`跨条目重复关键词: ${dup.join(', ')}`);
   const noTag = entries.filter(e => !/<[一-鿿A-Za-z0-9_-]+_id\d+>/.test(e.content || ''));
   if (noTag.length) problems.push(`无标签包裹的条目(${noTag.length}): ${noTag.map(e => e.uid).join(', ')}（如需按「标签规范」可加 <世界观_idN>）`);
-  const tokenBudget = wb.token_budget || 0;
-  if (tokenBudget && estTokens(entries.reduce((s, e) => s + (e.content || '').length, 0)) > tokenBudget)
-    problems.push(`⚠️ 全部内容约 ${estTokens(entries.reduce((s, e) => s + (e.content || '').length, 0))} token，超过 token_budget=${tokenBudget}`);
+  // 注：不做基于 token_budget 的「全部内容是否超预算」检查——ST 不读顶层 token_budget，
+  // 实际预算由全局 world_info_budget(%上下文)+world_info_budget_cap 决定，与文件内容量无直接对应关系。
   if (problems.length) { problems.forEach(p => console.log('•', p)); console.log(`\n共 ${problems.length} 项`); }
   else console.log('✓ 未发现客观结构问题（语义质量需由 Claude 再读一遍）');
 }
@@ -118,7 +117,8 @@ else if (cmd === 'audit') {
 else if (cmd === 'validate') {
   const errs = [];
   if (!wb.name) errs.push('缺 name');
-  if (typeof wb.scan_depth !== 'number') errs.push('scan_depth 缺失');
+  // 注：顶层 scan_depth / token_budget 不是必填——ST 运行时忽略它们（深度走全局 world_info_depth，
+  // 预算走全局 world_info_budget；per-entry 可经 extensions.scan_depth 覆盖）。故不校验其存在。
   if (typeof wb.entries !== 'object') errs.push('缺 entries 对象');
   entries.forEach(e => {
     if (!e.uid) errs.push('有条目缺 uid');
