@@ -11,13 +11,11 @@ description: "管理 SillyTavern 世界书(worldbook JSON)：查看/搜索/增�
 
 ## 文件与约定
 
-- 世界书是标准 ST 格式 JSON：`{name, description, scan_depth, token_budget, entries: {uid: {...}}}`
+- 世界书是标准 ST 格式 JSON：`{name, description, entries: {uid: {...}}}`（顶层 `scan_depth`/`token_budget` 为可选装饰字段，ST 运行时忽略，通常省略）
 - **默认世界书**：`C:\Users\Willard\Desktop\Project\兰斯世界书\兰斯系列世界观.json`
 - 处理其他世界书时路径由用户指定，本技能通用
 - 配套引擎：`<SKILL_DIR>/wb.js`（node 运行）
-- 兰斯专用辅助脚本（在 `C:\Users\Willard\Desktop\Project\兰斯世界书\` 下）：
-  - `build-rance-worldbook.js`：`兰斯系列世界观.md` → 原始 JSON
-  - `optimize-worldbook.js`：按秋青子方法论优化 JSON（内容减法/关键词清洗/标签包裹/蓝绿灯配置）
+- 兰斯世界书 JSON 是**唯一事实源**（2026-08-10 起已删 md→JSON 的 build/optimize 管线脚本，勿再重建）；直接对 JSON 用 wb.js 增删改即可
 - 秋青子预设已归档到 `C:\Users\Willard\Documents\SillyTavern-Workflow\presets\qiuqingzi\`（兰斯研究资料在 `research\rance\`，分析报告在 `docs\`）
 
 ## 条目字段（ST 标准）
