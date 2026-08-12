@@ -58,4 +58,4 @@ Windows 剪贴板经 `clipboard.ps1`(PowerShell)读取,macOS 经 `clipboard.swif
 - 描述默认用中文(除非用户要求其他语言)。
 - 配置在 `scripts/.env`(`DASHSCOPE_BASE_URL` / `DASHSCOPE_API_KEY` / `VISION_MODEL`),OpenAI 兼容服务均可。**不要把 API key 打印到输出,也不要提交到 git。**
 - 调用失败:向用户报告错误,请其检查 key / 模型名 / base URL。
-- 输出为空:先重试一次;仍为空说明 `max_tokens`(2048)被思维链耗尽,提示用户加大 `vision.js` 里的 `max_tokens`。
+- 输出为空:先重试一次;仍为空说明 `VISION_MAX_TOKENS` 预算被思维链耗尽,在 `scripts/.env` 里调大它(默认 8192,即不设死预算),或改用非 thinking 模型。

@@ -144,6 +144,8 @@ function request(payload) {
         } catch { resolve(data); }
       });
     });
+    const timeout = parseInt(process.env.VISION_TIMEOUT_MS, 10) || 300000; // 默认 5 分钟,thinking 模型响应慢
+    req.setTimeout(timeout, () => req.destroy(new Error(`API 请求超时(超 ${timeout}ms)`)));
     req.on("error", reject);
     req.write(body);
     req.end();
@@ -212,7 +214,8 @@ async function main() {
         { type: "text", text: prompt },
       ]}],
       stream: false,
-      max_tokens: 2048,
+      // 保留模型默认思维链(thinking);预算不设死,由 .env 的 VISION_MAX_TOKENS 控制(默认 8192),避免长思考截断
+      max_tokens: parseInt(process.env.VISION_MAX_TOKENS, 10) || 8192,
     });
     console.log(result);
   } catch (err) {
