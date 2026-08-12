@@ -16,7 +16,7 @@ Claude Code（code 侧）与 Claude Desktop / Cowork（cowork 侧）共用的 sk
 
 - **cowork 侧**（Claude Desktop）：Customize → Plugins 添加本仓库为 marketplace，安装插件。
 - **code 侧**（Claude Code）：通过 `claude plugin` / `/plugin` 从同一 marketplace 安装插件。
-- 两侧**各自安装、隔离加载、互不读取**，skill 以带插件前缀加载（`environment-skills:image-vision` 等），无裸名版。
+- 两侧**各自安装、隔离加载、互不读取**，skill 以带插件前缀加载（`environment-skills:web-content-fetcher` 等），无裸名版。
 - 已废弃 junction/手动拷贝分发——不要往 `~/.claude/skills/` 拷文件或建 junction。
 
 ## 结构总览
@@ -27,8 +27,7 @@ graph TD
     M --> G[plugins/general-skills<br/>通用 · 10]
     M --> PS[plugins/phaser-skills<br/>Phaser 4 官方 · 9]
     M --> GD[plugins/game-design-skills<br/>设计通识/素材 · 5]
-    E --> E1[image-vision]
-    E --> E2[web-content-fetcher]
+    E --> E1[web-content-fetcher]
     G --> G1[find-skills]
     G --> G2[code-review]
     G --> G3[diagnosing-bugs]
@@ -60,11 +59,10 @@ graph TD
 ├── .claude-plugin/
 │   └── marketplace.json               ← 注册下面两个插件
 └── plugins/
-    ├── environment-skills/            ← 插件 1：本机环境绑定（2 个）
+    ├── environment-skills/            ← 插件 1：本机环境绑定（1 个）
     │   ├── .claude-plugin/plugin.json
     │   └── skills/
-    │       ├── image-vision/          ← MCP 识图（analyze_image / ocr_image）
-    │       └── web-content-fetcher/   ← 网页正文抓取（Edge + 系统代理）
+        │       └── web-content-fetcher/   ← 网页正文抓取（Edge + 系统代理）
     ├── general-skills/                ← 插件 2：通用工作流（10 个）
         ├── .claude-plugin/plugin.json
         └── skills/
@@ -144,7 +142,6 @@ git -C ~/.claude/skills-repo push
 
 | Skill | 插件 | 作用 |
 |---|---|---|
-| image-vision | environment-skills | MCP 识图：看图/OCR/UI 评审/图表提取（纯文本模型无视觉时唯一读图通道） |
 | web-content-fetcher | environment-skills | 任意 URL 转干净 Markdown：公众号/掘金/CSDN/海外博客 |
 | find-skills | general-skills | 从 skill 生态（skills.sh）发现并安装 skill |
 | code-review | general-skills | 代码审查：需求轴 + 规范轴双维度 |
