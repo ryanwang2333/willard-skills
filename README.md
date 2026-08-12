@@ -28,6 +28,7 @@ graph TD
     M --> PS[plugins/phaser-skills<br/>Phaser 4 官方 · 9]
     M --> GD[plugins/game-design-skills<br/>设计通识/素材 · 5]
     E --> E1[web-content-fetcher]
+    E --> E2[claude-vision-skill]
     G --> G1[find-skills]
     G --> G2[code-review]
     G --> G3[diagnosing-bugs]
@@ -59,10 +60,11 @@ graph TD
 ├── .claude-plugin/
 │   └── marketplace.json               ← 注册下面两个插件
 └── plugins/
-    ├── environment-skills/            ← 插件 1：本机环境绑定（1 个）
+    ├── environment-skills/            ← 插件 1：本机环境绑定（2 个）
     │   ├── .claude-plugin/plugin.json
     │   └── skills/
-        │       └── web-content-fetcher/   ← 网页正文抓取（Edge + 系统代理）
+        │       ├── web-content-fetcher/   ← 网页正文抓取（Edge + 系统代理）
+        │       └── claude-vision-skill/    ← 识图（vision.js + 剪贴板，硅基流动 Qwen3.6）
     ├── general-skills/                ← 插件 2：通用工作流（10 个）
         ├── .claude-plugin/plugin.json
         └── skills/
@@ -143,6 +145,7 @@ git -C ~/.claude/skills-repo push
 | Skill | 插件 | 作用 |
 |---|---|---|
 | web-content-fetcher | environment-skills | 任意 URL 转干净 Markdown：公众号/掘金/CSDN/海外博客 |
+| claude-vision-skill | environment-skills | 识图：本地路径/URL/剪贴板图片转文字（vision.js，硅基流动 Qwen3.6） |
 | find-skills | general-skills | 从 skill 生态（skills.sh）发现并安装 skill |
 | code-review | general-skills | 代码审查：需求轴 + 规范轴双维度 |
 | diagnosing-bugs | general-skills | 反馈回路式 bug 排查 |
