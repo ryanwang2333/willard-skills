@@ -16,4 +16,8 @@ git -C ~/.claude/skills-repo add .
 git -C ~/.claude/skills-repo commit -m "改动描述"
 git -C ~/.claude/skills-repo push
 ```
-3. 更新两侧：cowork 端 Customize → Plugins 点「更新」；code 端 `/plugin marketplace update`。
+3. 同步本机镜像（本机嵌入式 Claude Code 的 `/plugin marketplace update` 不执行 git fetch，发布后必须手动对齐镜像，否则看不到新版本）：
+```
+python ~/.claude/skills-repo/scripts/sync-marketplace.py
+```
+4. 更新两侧：cowork 端 Customize → Plugins 点「更新」；code 端 `/plugin marketplace update`（先跑完第 3 步，update 才能读到新版本），然后重启 Claude Code。
