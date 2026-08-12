@@ -1,7 +1,7 @@
 {
   "name": "environment-skills",
-  "description": "本机环境绑定 skills: web-content-fetcher(Edge/代理网页抓取)",
-  "version": "1.0.5",
+  "description": "本机环境绑定 skills: web-content-fetcher(网页抓取), see-image(识图)",
+  "version": "1.0.6",
   "author": {
     "name": "Willard"
   }

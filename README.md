@@ -58,7 +58,7 @@ graph TD
     M --> PS[plugins/phaser-skills<br/>Phaser 4 官方 · 9]
     M --> GD[plugins/game-design-skills<br/>设计通识/素材 · 5]
     E --> E1[web-content-fetcher]
-    E --> E2[claude-vision-skill]
+    E --> E2[see-image]
     G --> G1[find-skills]
     G --> G2[code-review]
     G --> G3[diagnosing-bugs]
@@ -111,7 +111,7 @@ claude plugin install "game-design-skills@willard-skills"
 | Skill | 插件 | 作用 |
 |---|---|---|
 | web-content-fetcher | environment-skills | 任意 URL 转干净 Markdown：公众号/掘金/CSDN/海外博客 |
-| claude-vision-skill | environment-skills | 识图：本地路径/URL/剪贴板图片转文字（vision.js 脚本，硅基流动） |
+| see-image | environment-skills | 识图：引导调用 MCP server vision（mcp__vision__see_image / see_clipboard，硅基流动视觉模型），MCP 不可用时兜底 vision-cli.cjs |
 | find-skills | general-skills | 从 skill 生态（skills.sh）发现并安装 skill |
 | code-review | general-skills | 代码审查：需求轴 + 规范轴双维度 |
 | diagnosing-bugs | general-skills | 反馈回路式 bug 排查 |
