@@ -54,7 +54,7 @@ git -C ~/.claude/skills-repo push
 ```mermaid
 graph TD
     M[marketplace.json<br/>willard-skills] --> E[plugins/environment-skills<br/>环境绑定 · 2]
-    M --> G[plugins/general-skills<br/>通用 · 11]
+    M --> G[plugins/general-skills<br/>通用 · 10]
     M --> PS[plugins/phaser-skills<br/>Phaser 4 官方 · 9]
     M --> GD[plugins/game-design-skills<br/>设计通识/素材 · 5]
     E --> E1[web-content-fetcher]
@@ -69,7 +69,6 @@ graph TD
     G --> G8[to-spec]
     G --> G9[teach]
     G --> G10[wait-what]
-    G --> G11[worldbook]
     PS --> PS1[audio-and-sound]
     PS --> PS2[cameras]
     PS --> PS3[input-keyboard-mouse-touch]
@@ -123,7 +122,6 @@ claude plugin install "game-design-skills@willard-skills"
 | to-spec | general-skills | 把已拍板需求固化成语义 spec |
 | teach | general-skills | 跨会话教学工作区 |
 | wait-what | general-skills | 用户没懂时换方式重讲 |
-| worldbook | general-skills | SillyTavern 世界书管理：条目增删改/批量处理/质量审查/触发词配置/导入导出 |
 | audio-and-sound | phaser-skills | Phaser 4 音频：加载/播放/音量/Web Audio（来源 phaserjs/phaser 官方） |
 | cameras | phaser-skills | 镜头效果：shake/fade/flash/zoom/跟随/minimap |
 | input-keyboard-mouse-touch | phaser-skills | 键盘/鼠标/触摸/指针/拖拽/游戏手柄输入 |

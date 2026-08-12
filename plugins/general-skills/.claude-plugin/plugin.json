@@ -1,7 +1,7 @@
 {
   "name": "general-skills",
-  "description": "通用 skills: find-skills(生态发现)、code-review(代码审查)、diagnosing-bugs(排障)、research(查证)、grill-me(需求追问)、handoff(收尾交接)、skill-review(skill 审查)、to-spec(规格固化)、teach(教学)、wait-what(重讲)、worldbook(世界书管理)",
-  "version": "1.0.4",
+  "description": "通用 skills: find-skills(生态发现)、code-review(代码审查)、diagnosing-bugs(排障)、research(查证)、grill-me(需求追问)、handoff(收尾交接)、skill-review(skill 审查)、to-spec(规格固化)、teach(教学)、wait-what(重讲)",
+  "version": "1.0.5",
   "author": {
     "name": "Willard"
   }
